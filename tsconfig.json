@@ -1,25 +1,26 @@
 {
-    "compilerOptions": {
-      "target": "es2015",
-      "useDefineForClassFields": true,
-      "lib": ["DOM", "DOM.Iterable", "ES2023"],
-      "allowJs": false,
-      "skipLibCheck": true,
-      "esModuleInterop": false,
-      "allowSyntheticDefaultImports": true,
-      "strict": true,
-      "forceConsistentCasingInFileNames": true,
-      "module": "CommonJS",
-      "moduleResolution": "Node",
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "noEmit": true,
-      "jsx": "react-jsx",
-      "paths":{
-        "react": ["./node_modules/@types/react"],
-      }
-    },
-    "include": ["src", "**/*.ts", "**/*.tsx"],
-    "references": [{ "path": "./tsconfig.node.json" }]
+  "compilerOptions": {
+    "target": "es2015",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "types":  ["vite/client"],
+    "paths":{
+      "react": ["./node_modules/@types/react"],
+    }
+  },
+  "include": ["src", "**/*.ts", "**/*.tsx"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
   

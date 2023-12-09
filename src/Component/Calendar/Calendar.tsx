@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mweekdays, MCalendar, MEvents } from './calendar'
+import { Mweekdays, MCalendar, MEvents } from './calendar.type'
 import * as _ from 'lodash';
 import { motion } from 'framer-motion';
 import * as _dutlis from 'date-fns';
@@ -20,8 +20,8 @@ function MCalendar({ events, onSelectDate }:MCalendar) {
     const groupedEvents = _.groupBy(events, ({ startDate, startTime }) => _dutlis.format(new Date(`${startDate}T${startTime}`), "DD/MM/YYYY"));
     const handleSelect = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         e.stopPropagation();
-        const date = e.currentTarget.dataset['date']
-        const mod = {slcdate: '', events: []}
+        const date = e.currentTarget.dataset['date'];
+        let mod:any = { slcdate: '', events: [] };
         if (date) {
             mod.slcdate = date;
             if (groupedEvents[date]) mod.events = groupedEvents[date];
@@ -44,7 +44,7 @@ function MCalendar({ events, onSelectDate }:MCalendar) {
         >
           {weekdays.map((day, index) => (<motion.article className='mx-1 py-1' key={`mcalendar-day${index}`}>{day}</motion.article>))}
           {bufferDays.map((bfd) => <motion.article key={bfd + '_empty'} className='mcalendar-date'>&nbsp;</motion.article>)}
-          {daysInTheMonth.map((date, idx) => {
+          {daysInTheMonth.map((date) => {
             const formattedDate = _dutlis.format(date, "DD/MM/YYY");
             const displayDate = _dutlis.format(date, "d");
             const eventsLength = groupedEvents[formattedDate].length;
