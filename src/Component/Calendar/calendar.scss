@@ -40,6 +40,9 @@ $transparent-back: #1a263194;
             background-color: $success;
             font-size: 10px;
         }
+        &.empty {
+           pointer-events: none;
+        }
     }
     
 }
