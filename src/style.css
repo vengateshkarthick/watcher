@@ -1,0 +1,29 @@
+html {
+  height: 100dvh;
+  width: 100dvw;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
+  scroll-behavior: smooth;
+}
+
+.mcalendar-container {
+  margin: auto;
+  min-width: 650px;
+  max-width: 40dvw;
+  height: 700px;
+  overflow: hidden auto;
+  scroll-behavior: smooth;
+}

@@ -1,0 +1,43 @@
+$success: #32a852;
+$danger: #ef4f5f;
+$primary: #263e58;
+$primary-tilt: #263e58cc;
+$secondary: #f1f2f7;
+$text-color: #121212;
+$hover-background-color: #263e581a;
+$transparent-back: #1a263194;
+
+.mcalendar {
+    display: grid;
+    grid-template-columns: repeat(7, 70px);
+    .mday {
+        font-size: 1.1rem;
+        border-bottom: 0.1rem solid $hover-background-color;
+    }
+    .mcalendar-date {
+        height: 30px;
+        width: 30px;
+        font-size: 12px;
+        cursor: pointer;
+        gap: 0.1rem;
+        align-items: center;
+        justify-content: space-between;
+        color: $primary-tilt;
+        user-select: none;
+        &:hover {
+            background-color: $hover-background-color;
+            border-radius: 100px;
+        }
+        &.sleceted {
+            background-color: $primary;
+            color: #fff;
+        }
+        .display-events p{
+            height: 0.5rem;
+            width: 0.5rem;
+            background-color: $success;
+            font-size: 10px;
+        }
+    }
+    
+}
