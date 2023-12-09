@@ -9,24 +9,26 @@ $transparent-back: #1a263194;
 
 .mcalendar {
     display: grid;
-    grid-template-columns: repeat(7, 70px);
+    grid-template-columns: repeat(7, 80px);
+    place-items: center;
     .mday {
         font-size: 1.1rem;
         border-bottom: 0.1rem solid $hover-background-color;
     }
     .mcalendar-date {
-        height: 30px;
-        width: 30px;
-        font-size: 12px;
+        height: 40px;
+        width: 40px;
+        font-size: 16px;
         cursor: pointer;
         gap: 0.1rem;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         color: $primary-tilt;
         user-select: none;
+        text-align: center;
         &:hover {
             background-color: $hover-background-color;
-            border-radius: 100px;
+            border-radius: 80px;
         }
         &.sleceted {
             background-color: $primary;

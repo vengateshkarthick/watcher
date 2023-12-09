@@ -26,4 +26,7 @@ body {
   height: 700px;
   overflow: hidden auto;
   scroll-behavior: smooth;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
