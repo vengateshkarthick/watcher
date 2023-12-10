@@ -1,8 +1,9 @@
 export type Mremainder = "1800" | "3600" | "86400" | "600";
 export interface Mweekdays {
-    short: ["Mon" & string, "Tue" & string, "Wed" & string, "Thur" & string, "Fri" & string, "Sat" & string, "Sun" & string];
-    long: ["Monday" & string, "Tuesday" & string, "Wednesday" & string, "Thursday" & string, "Friday" & string, "Saturday" & string, "Sunday" & string];
+    short: [ "Sun" & string, "Mon" & string, "Tue" & string, "Wed" & string, "Thur" & string, "Fri" & string, "Sat" & string];
+    long: ["Sunday" & string, "Monday" & string, "Tuesday" & string, "Wednesday" & string, "Thursday" & string, "Friday" & string, "Saturday" & string];
 } 
+
 export interface MEvents {
   title: string,
   startDate: string,

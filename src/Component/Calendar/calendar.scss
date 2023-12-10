@@ -3,46 +3,98 @@ $danger: #ef4f5f;
 $primary: #263e58;
 $primary-tilt: #263e58cc;
 $secondary: #f1f2f7;
+$secondary-tilt: #263e5869;
 $text-color: #121212;
 $hover-background-color: #263e581a;
 $transparent-back: #1a263194;
+$box-shadow: #f5f5f5;
 
+@mixin smallBox($background-color) {
+  height: 0.9rem;
+  width: 0.9rem;
+  background-color: $background-color;
+  border-radius: 4px;
+}
+
+.mcalendar-wrapper {
+  padding: 1rem;
+  box-sizing: border-box;
+  border-radius: 16px;
+  border: 0.1rem solid transparent;
+  box-shadow: 2px -1px 10px 8px $box-shadow;
+  .mcalendar-full-month {
+    color: $primary;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    gap: 1.1rem;
+    &.disabled {
+      stroke: $secondary-tilt;
+    }
+    p {
+      margin-bottom: 0;
+    }
+    img {
+      cursor: pointer;
+    }
+  }
+  .lengend {
+    font-size: 15px;
+    gap: 10px;
+    .events {
+      @include smallBox($success);
+    }
+    .today {
+      @include smallBox($transparent-back);
+    }
+  }
+}
 .mcalendar {
-    display: grid;
-    grid-template-columns: repeat(7, 80px);
-    place-items: center;
-    .mday {
-        font-size: 1.1rem;
-        border-bottom: 0.1rem solid $hover-background-color;
+  display: grid;
+  grid-template-columns: repeat(7, 80px);
+  place-items: center;
+  .mcalendar-day {
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-bottom: 2px solid $secondary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .mcalendar-date {
+    height: 42px;
+    width: 42px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    gap: 0.1rem;
+    padding: 0.1rem;
+    align-items: center;
+    justify-content: center;
+    color: $primary-tilt;
+    user-select: none;
+    text-align: center;
+    border-radius: 100px;
+    &:hover {
+      background-color: $hover-background-color;
     }
-    .mcalendar-date {
-        height: 40px;
-        width: 40px;
-        font-size: 16px;
-        cursor: pointer;
-        gap: 0.1rem;
-        align-items: center;
-        justify-content: center;
-        color: $primary-tilt;
-        user-select: none;
-        text-align: center;
-        &:hover {
-            background-color: $hover-background-color;
-            border-radius: 80px;
-        }
-        &.sleceted {
-            background-color: $primary;
-            color: #fff;
-        }
-        .display-events p{
-            height: 0.5rem;
-            width: 0.5rem;
-            background-color: $success;
-            font-size: 10px;
-        }
-        &.empty {
-           pointer-events: none;
-        }
+
+    &.current-date {
+      background-color: $transparent-back;
+      color: #fff;
     }
-    
+    &.selected {
+      background-color: $primary;
+      color: #fff;
+    }
+    .display-events p {
+      height: 0.5rem;
+      width: 0.5rem;
+      background-color: $success;
+      font-size: 10px;
+    }
+    &.empty {
+      pointer-events: none;
+      color: $secondary-tilt;
+    }
+  }
 }
