@@ -11,6 +11,39 @@ class UseCalendarHelper {
        year -= 1; 
        month = 11;
       }
+      else {
+        month -= 1;
+      }
+      const date = _dutlis.getDate(currentDate);
+      const _currentDate = new Date(year, month, date);
+      return _currentDate;
+    }
+
+    static getCurrentMonthStartDate(currentDate: Date) {
+      return  _dutlis.startOfMonth(currentDate);
+    }
+
+    static getCurrentMonthEndDate(currentDate: Date) {
+      return  _dutlis.startOfMonth(currentDate);
+    }
+
+    static generateDaysIntheMonth(startDate:Date, endDate:Date) {
+      return  _dutlis.eachDayOfInterval({
+        start: _dutlis.startOfMonth(startDate),
+        end: _dutlis.endOfMonth(endDate),
+      });
+    }
+
+    static moveNextMonth(currentDate: Date) {
+      let month = _dutlis.getMonth(currentDate);
+      let year = _dutlis.getYear(currentDate);
+      if (month === 11) {
+       year += 1; 
+       month = 0;
+      }
+      else {
+        month += 1;
+      }
       const date = _dutlis.getDate(currentDate);
       const _currentDate = new Date(year, month, date);
       return _currentDate;
@@ -37,15 +70,41 @@ export const useCalendarState = create<MCalendarState>((set) => ({
     currentMonthEndDate: _dutlis.endOfMonth(new Date()),
     daysInCurrentMonth: _dutlis.eachDayOfInterval({
       start: _dutlis.startOfMonth(new Date()),
-      end: _dutlis.startOfMonth(new Date()),
+      end: _dutlis.endOfMonth(new Date()),
     }),
     weekDaysInShort: ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"],
     currentView: 'monthly',
     movePreviousMonth: () => {
-      set((state) => ({ currentDate: UseCalendarHelper.movePreviousMonth(state.currentDate) }) )
+      set((state) => {
+        const ncurrentMonth = UseCalendarHelper.movePreviousMonth(state.currentDate);
+        const nStartDate = UseCalendarHelper.getCurrentMonthStartDate(ncurrentMonth);
+        const nEndDate = UseCalendarHelper.getCurrentMonthEndDate(ncurrentMonth);
+        const nDays = UseCalendarHelper.generateDaysIntheMonth(nStartDate, nEndDate);
+        return {
+          currentDate: ncurrentMonth,
+          currentMonthStartDate: nStartDate,
+          currentMonthEndDate: nEndDate,
+          daysInCurrentMonth: nDays,
+        }
+      });
     },
-    switchView: () => {},
-    moveNextMonth: () => {},
+    switchView: () => {
+      set((state) => ({ currentView: state.currentView.includes('monthly') ? 'daily' : 'monthly' }))
+    },
+    moveNextMonth: () => {
+      set((state) => {
+        const ncurrentMonth = UseCalendarHelper.moveNextMonth(state.currentDate);
+        const nStartDate = UseCalendarHelper.getCurrentMonthStartDate(ncurrentMonth);
+        const nEndDate = UseCalendarHelper.getCurrentMonthEndDate(ncurrentMonth);
+        const nDays = UseCalendarHelper.generateDaysIntheMonth(nStartDate, nEndDate);
+        return {
+          currentDate: ncurrentMonth,
+          currentMonthStartDate: nStartDate,
+          currentMonthEndDate: nEndDate,
+          daysInCurrentMonth: nDays,
+        }
+      });
+    },
     timeFormat: "HH:mm",
 
 }));

@@ -1,5 +1,5 @@
 import React from "react";
-import { Mweekdays, MCalendar, MEvents } from "./calendar.type";
+import { MCalendar, MEvents } from "./calendar.type";
 import * as _ from "lodash";
 import { motion } from "framer-motion";
 import * as _dutlis from "date-fns";
@@ -7,45 +7,27 @@ import rightarrow from "../../assests/right.svg";
 import leftarrow from "../../assests/left.svg";
 
 import "./calendar.scss";
+import { useCalendarState } from "../../store/bucket";
+import MCalendarHelper from "./helper";
 
-const weekdays: Mweekdays["short"] = [
-  "Sun",
-  "Mon",
-  "Tue",
-  "Wed",
-  "Thur",
-  "Fri",
-  "Sat",
-];
 
 function Calendar({ events, onSelectDate }: MCalendar) {
-  const currentDate = new Date();
   const [selectedDate, setSelectedDate] = React.useState<{
     slcdate: string;
     events?: [] | MEvents[];
   }>({ slcdate: "" });
-  const startDate = _dutlis.startOfMonth(currentDate);
-  const endDate = _dutlis.endOfMonth(currentDate);
-  /**
-   * get arrays of days from start date to ending date of the month
-   */
-  const daysInTheMonth = _dutlis.eachDayOfInterval({
-    start: startDate,
-    end: endDate,
-  });
+
+  const { currentDate, currentMonthStartDate, currentMonthEndDate, daysInCurrentMonth, weekDaysInShort } = useCalendarState((state) => state)
+
   /**
    *  for filling the space left at starting of month in that week -
    *  get last date of previous month
    *  get the buffer days - the number of days in a week left till the starting of the month
    *  iterate from (last date - buffer days length) to the length of buffer days
    */
-  const previousMonth = _dutlis.getMonth(currentDate) - 1;
-  const lastDateOfPreviousMonth = _dutlis.getDaysInMonth(
-    previousMonth !== -1
-      ? new Date(_dutlis.getYear(currentDate), previousMonth)
-      : new Date(new Date(_dutlis.getYear(currentDate), 11))
-  );
-  const bufferDaysFromStart = _.range(0, _dutlis.getDay(startDate) - 1);
+  const previousMonth = MCalendarHelper.getPreviousMonth(currentDate);
+  const lastDateOfPreviousMonth = MCalendarHelper.getLastDateOfPreviousMonth(previousMonth, currentDate)
+  const bufferDaysFromStart = _.range(0, MCalendarHelper.getDay(currentMonthStartDate) - 1);
 
   const previousMonthRemainigDays = _.range(
     lastDateOfPreviousMonth - bufferDaysFromStart.length,
@@ -57,10 +39,10 @@ function Calendar({ events, onSelectDate }: MCalendar) {
    *  get buffer days from the end of the month to 7
    *  iterate till buffer days.length from 1
    */
-  const bufferDaysFromEnd = _.range(_dutlis.getDay(endDate) + 1, 7);
+  const bufferDaysFromEnd = _.range(_dutlis.getDay(currentMonthEndDate) + 1, 7);
   const nextMonthStartingDays = _.range(1, bufferDaysFromEnd.length + 1);
   const groupedEvents = _.groupBy(events, ({ startDate, startTime }) =>
-    _dutlis.format(new Date(`${startDate}T${startTime}`), "dd/MM/yyyy")
+    MCalendarHelper.getFormattedDate(new Date(`${startDate}T${startTime}`), "dd/MM/yyyy")
   );
   const handleSelect = (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -108,8 +90,8 @@ function Calendar({ events, onSelectDate }: MCalendar) {
           />
         </p>
         <p>
-          {_dutlis.format(currentDate, "MMMM")}&nbsp;(
-          {_dutlis.format(currentDate, "yyyy")})
+          {MCalendarHelper.getFormattedDate(currentDate, "MMMM")}&nbsp;(
+          {MCalendarHelper.getFormattedDate(currentDate, "yyyy")})
         </p>
         <p>
           <motion.img
@@ -130,7 +112,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.3 }}
       >
-        {weekdays.map((day, index) => (
+        {weekDaysInShort.map((day, index) => (
           <motion.article
             className="mx-1 py-1 mcalendar-day"
             key={`mcalendar-day${index}`}
@@ -147,12 +129,12 @@ function Calendar({ events, onSelectDate }: MCalendar) {
             {bfd}
           </motion.article>
         ))}
-        {daysInTheMonth.map((date) => {
-          const formattedDate = _dutlis.format(date, "dd/MM/yyyy");
-          const displayDate = _dutlis.format(date, "d");
+        {daysInCurrentMonth.map((date) => {
+          const formattedDate = MCalendarHelper.getFormattedDate(date, "dd/MM/yyyy");
+          const displayDate = MCalendarHelper.getFormattedDate(date, "d");
           const eventsLength = groupedEvents[formattedDate]?.length;
           const isSelectedDate = selectedDate.slcdate.includes(formattedDate);
-          const isCurrentDate = _dutlis.isSameDay(date, currentDate);
+          const isCurrentDate = MCalendarHelper.isSameDate(date, currentDate);
           return (
             <motion.article
               initial={{ scale: 0.9 }}
