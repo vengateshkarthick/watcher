@@ -17,7 +17,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
     events?: [] | MEvents[];
   }>({ slcdate: "" });
 
-  const { currentDate, currentMonthStartDate, currentMonthEndDate, daysInCurrentMonth, weekDaysInShort } = useCalendarState((state) => state)
+  const { currentDate, currentMonthStartDate, currentMonthEndDate, daysInCurrentMonth, weekDaysInShort, moveNextMonth, movePreviousMonth } = useCalendarState((state) => state)
 
   /**
    *  for filling the space left at starting of month in that week -
@@ -39,7 +39,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
    *  get buffer days from the end of the month to 7
    *  iterate till buffer days.length from 1
    */
-  const bufferDaysFromEnd = _.range(_dutlis.getDay(currentMonthEndDate) + 1, 7);
+  const bufferDaysFromEnd = _.range(MCalendarHelper.getDay(currentMonthEndDate) + 1, 7);
   const nextMonthStartingDays = _.range(1, bufferDaysFromEnd.length + 1);
   const groupedEvents = _.groupBy(events, ({ startDate, startTime }) =>
     MCalendarHelper.getFormattedDate(new Date(`${startDate}T${startTime}`), "dd/MM/yyyy")
@@ -74,10 +74,21 @@ function Calendar({ events, onSelectDate }: MCalendar) {
       },
     ];
   }, []);
+
+  const handlePrevious = ( e: React.MouseEvent<HTMLElement, MouseEvent> ) => {
+    movePreviousMonth();
+    e.stopPropagation();
+  }
+
+  const handleNext = ( e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+   moveNextMonth();
+   e.stopPropagation();
+  }
   return (
     <motion.div className="mcalendar-wrapper">
       <motion.article className="mcalendar-full-month d-flex align-items-center justify-content-center m-1 p-1">
         <p>
+          <div onClick={handlePrevious} tabIndex={-1}>
           <motion.img
             animate={{ scale: 1 }}
             whileHover={{ x: "-10px" }}
@@ -88,13 +99,15 @@ function Calendar({ events, onSelectDate }: MCalendar) {
             height={30}
             width={20}
           />
+          </div>
         </p>
         <p>
           {MCalendarHelper.getFormattedDate(currentDate, "MMMM")}&nbsp;(
           {MCalendarHelper.getFormattedDate(currentDate, "yyyy")})
         </p>
         <p>
-          <motion.img
+         <div onClick={handleNext} tabIndex={-1}>
+         <motion.img
             animate={{ scale: 1 }}
             whileTap={{ x: "10px" }}
             whileHover={{ x: "10px" }}
@@ -104,6 +117,8 @@ function Calendar({ events, onSelectDate }: MCalendar) {
             height={30}
             width={20}
           />
+         </div>
+          
         </p>
       </motion.article>
       <motion.div

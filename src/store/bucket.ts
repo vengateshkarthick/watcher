@@ -24,7 +24,7 @@ class UseCalendarHelper {
     }
 
     static getCurrentMonthEndDate(currentDate: Date) {
-      return  _dutlis.startOfMonth(currentDate);
+      return  _dutlis.endOfMonth(currentDate);
     }
 
     static generateDaysIntheMonth(startDate:Date, endDate:Date) {
