@@ -38,16 +38,24 @@ function Calendar({ events, onSelectDate }: MCalendar) {
     previousMonth,
     currentDate
   );
+  const startingWeekDay = MCalendarHelper.getDay(currentMonthStartDate);
   const bufferDaysFromStart = _.range(
     0,
-    MCalendarHelper.getDay(currentMonthStartDate) - 1
-  );
-
-  const previousMonthRemainigDays = _.range(
-    lastDateOfPreviousMonth - bufferDaysFromStart.length,
-    lastDateOfPreviousMonth + 1,
+    startingWeekDay === 1 ? startingWeekDay : startingWeekDay - 1,
     1
   );
+
+  let previousMonthRemainigDays:Array<number> = [];
+  if(startingWeekDay) {
+    if(startingWeekDay === 1) previousMonthRemainigDays.push(lastDateOfPreviousMonth);
+    else {
+      previousMonthRemainigDays = _.range(
+        lastDateOfPreviousMonth - bufferDaysFromStart.length,
+        lastDateOfPreviousMonth + 1,
+        1
+      );
+    }
+  }
   /**
    *  for filling the space left at ending of the month in that week -
    *  get buffer days from the end of the month to 7
@@ -96,11 +104,13 @@ function Calendar({ events, onSelectDate }: MCalendar) {
   }, []);
 
   const handlePrevious = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    setSelectedDate(prev => ({ ...prev, slcdate: "" }));
     movePreviousMonth();
     e.stopPropagation();
   };
 
   const handleNext = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    setSelectedDate(prev => ({ ...prev, slcdate: "" }));
     moveNextMonth();
     e.stopPropagation();
   };
@@ -206,7 +216,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
       </motion.div>
       <motion.article className="d-flex w-100 m-1 align-items-baseline justify-content-center gap-3">
         <motion.button
-          className="set-today-btn"
+          className={`set-today-btn ${MCalendarHelper.isSameMoth(new Date(), currentDate) ? "disabled" : ""}`}
           initial={{ scale: 1 }}
           whileTap={{ scale: 1.2 }}
           transition={{ duration: 0.5, type: "spring" }}
@@ -214,6 +224,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
             switchToToday();
             e.stopPropagation();
           }}
+          disabled={MCalendarHelper.isSameMoth(new Date(), currentDate)}
         >
           Today
         </motion.button>

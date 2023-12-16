@@ -3,6 +3,20 @@ import * as _ from "lodash";
 import * as _dutlis from "date-fns";
 import { MEvents, Mweekdays } from "../Component/Calendar/calendar.type";
 
+enum endate {
+  'm0' = 31,
+  'm1' = 28,
+  'm2' = 31,
+  'm3' = 30,
+  'm4' = 31,
+  'm5' = 30,
+  'm6' = 31,
+  'm7' = 31,
+  'm8' = 30,
+  'm9' = 31,
+  'm10' = 30,
+  'm11' = 31,
+}
 class UseCalendarHelper {
     static movePreviousMonth(currentDate: Date) {
       let month = _dutlis.getMonth(currentDate);
@@ -14,7 +28,8 @@ class UseCalendarHelper {
       else {
         month -= 1;
       }
-      const date = _dutlis.getDate(currentDate);
+     let date = _dutlis.getDate(currentDate);
+     if (date === 30 || date === 31) date = Number(endate[`m${month}` as any]);
       const _currentDate = new Date(year, month, date);
       return _currentDate;
     }
@@ -44,15 +59,15 @@ class UseCalendarHelper {
       else {
         month += 1;
       }
-      const date = _dutlis.getDate(currentDate);
+      let date = _dutlis.getDate(currentDate);
+      if (date === 30 || date === 31) date = Number(endate[`m${month}` as any]);
       const _currentDate = new Date(year, month, date);
       return _currentDate;
     }
 
     static switchToToday() {
-      let month = _dutlis.getMonth(new Date());
-      let year = _dutlis.getYear(new Date());
-      
+      const month = _dutlis.getMonth(new Date());
+      const year = _dutlis.getYear(new Date());
       const date = _dutlis.getDate(new Date());
       const _currentDate = new Date(year, month, date);
       return _currentDate;

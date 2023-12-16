@@ -7,8 +7,8 @@ class MCalendarHelper {
    static getLastDateOfPreviousMonth(prevMonth: number, date: Date) {
      return _dateutils.getDaysInMonth(
         prevMonth !== -1
-          ? new Date(_dateutils.getYear(date), prevMonth)
-          : new Date(new Date(_dateutils.getYear(date), 11))
+          ? new Date(_dateutils.getYear(date), prevMonth, 1)
+          : 11
       );
    }
    
@@ -22,6 +22,10 @@ class MCalendarHelper {
 
    static isSameDate(date:Date, currentDate: Date) {
     return _dateutils.isSameDay(date, currentDate);
+   }
+
+   static isSameMoth(c1:Date, c2: Date) {
+     return _dateutils.getMonth(c1) === _dateutils.getMonth(c2);
    }
 
 
