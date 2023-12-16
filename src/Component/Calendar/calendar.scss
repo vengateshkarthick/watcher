@@ -38,6 +38,18 @@ $box-shadow: #f5f5f5;
       cursor: pointer;
     }
   }
+  .set-today-btn {
+    border-radius: 80px;
+    border: 0.1rem solid transparent;
+    width: 85%;
+    outline: none;
+    padding: 0.25rem 0.76rem;
+    background-color: $primary;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
   .lengend {
     font-size: 15px;
     gap: 10px;
@@ -53,6 +65,7 @@ $box-shadow: #f5f5f5;
   display: grid;
   grid-template-columns: repeat(7, 80px);
   place-items: center;
+  min-height: 453px;
   .mcalendar-day {
     font-size: 1.1rem;
     font-weight: 600;

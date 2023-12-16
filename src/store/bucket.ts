@@ -48,6 +48,15 @@ class UseCalendarHelper {
       const _currentDate = new Date(year, month, date);
       return _currentDate;
     }
+
+    static switchToToday() {
+      let month = _dutlis.getMonth(new Date());
+      let year = _dutlis.getYear(new Date());
+      
+      const date = _dutlis.getDate(new Date());
+      const _currentDate = new Date(year, month, date);
+      return _currentDate;
+    }
 }
 
 interface MCalendarState {
@@ -61,7 +70,8 @@ interface MCalendarState {
     weekDaysInShort: Mweekdays['short'],
     switchView: () => void,
     events?: MEvents[],
-    timeFormat: "HH:mm" | "hh:mm aaaa"
+    timeFormat: "HH:mm" | "hh:mm aaaa",
+    switchToToday: () => void;
 }
 
 export const useCalendarState = create<MCalendarState>((set) => ({
@@ -106,5 +116,19 @@ export const useCalendarState = create<MCalendarState>((set) => ({
       });
     },
     timeFormat: "HH:mm",
+    switchToToday: () => {
+      set((state) => {
+        const ncurrentMonth = UseCalendarHelper.switchToToday();
+        const nStartDate = UseCalendarHelper.getCurrentMonthStartDate(ncurrentMonth);
+        const nEndDate = UseCalendarHelper.getCurrentMonthEndDate(ncurrentMonth);
+        const nDays = UseCalendarHelper.generateDaysIntheMonth(nStartDate, nEndDate);
+        return {
+          currentDate: ncurrentMonth,
+          currentMonthStartDate: nStartDate,
+          currentMonthEndDate: nEndDate,
+          daysInCurrentMonth: nDays,
+        }
+      });
+    }
 
 }));
