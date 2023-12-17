@@ -189,6 +189,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
               "dd/MM/yyyy"
             );
             const displayDate = MCalendarHelper.getFormattedDate(date, "d");
+            const isNewYearFest = formattedDate.includes("01/01");
             const eventsLength = groupedEvents[formattedDate]?.length;
             const isSelectedDate = selectedDate.slcdate.includes(formattedDate);
             const isCurrentDate = MCalendarHelper.isSameDay(date, currentDate);
@@ -206,7 +207,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
                 data-date={formattedDate}
                 onClick={(e) => handleSelect(e, formattedDate)}
               >
-                <motion.div className="display-date">{displayDate}</motion.div>
+                <motion.div className="display-date">{displayDate} {isNewYearFest ? <sup>🥳</sup> : ''}</motion.div>
                 <motion.div className="display-events">
                   {eventsLength && <p className="rounded">+{eventsLength}</p>}
                 </motion.div>
