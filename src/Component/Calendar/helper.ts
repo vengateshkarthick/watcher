@@ -20,12 +20,20 @@ class MCalendarHelper {
     return _dateutils.format(date, format);
    }
 
-   static isSameDate(date:Date, currentDate: Date) {
+   static isSameDay(date:Date, currentDate: Date) {
     return _dateutils.isSameDay(date, currentDate);
    }
 
    static isSameMoth(c1:Date, c2: Date) {
      return _dateutils.getMonth(c1) === _dateutils.getMonth(c2);
+   }
+
+   static isSameDate(c1:Date, c2:Date) {
+    return _dateutils.isSameDay(c1, c2) && _dateutils.isSameMonth(c1, c2) && _dateutils.isSameYear(c1, c2)
+   }
+   
+   static isSameYear(c1:Date, c2:Date) {
+    return  _dateutils.isSameYear(c1, c2);
    }
 
 

@@ -45,9 +45,10 @@ function Calendar({ events, onSelectDate }: MCalendar) {
     1
   );
 
-  let previousMonthRemainigDays:Array<number> = [];
-  if(startingWeekDay) {
-    if(startingWeekDay === 1) previousMonthRemainigDays.push(lastDateOfPreviousMonth);
+  let previousMonthRemainigDays: Array<number> = [];
+  if (startingWeekDay) {
+    if (startingWeekDay === 1)
+      previousMonthRemainigDays.push(lastDateOfPreviousMonth);
     else {
       previousMonthRemainigDays = _.range(
         lastDateOfPreviousMonth - bufferDaysFromStart.length,
@@ -104,52 +105,60 @@ function Calendar({ events, onSelectDate }: MCalendar) {
   }, []);
 
   const handlePrevious = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    setSelectedDate(prev => ({ ...prev, slcdate: "" }));
+    setSelectedDate((prev) => ({ ...prev, slcdate: "" }));
     movePreviousMonth();
     e.stopPropagation();
   };
 
   const handleNext = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    setSelectedDate(prev => ({ ...prev, slcdate: "" }));
+    setSelectedDate((prev) => ({ ...prev, slcdate: "" }));
     moveNextMonth();
     e.stopPropagation();
   };
+
+  const Header = () => {
+    return (
+      <React.Fragment>
+        <motion.article className="mcalendar-full-month d-flex align-items-center justify-content-center m-1 p-1">
+          <p>
+            <div onClick={handlePrevious} tabIndex={-1}>
+              <motion.img
+                animate={{ scale: 1 }}
+                whileHover={{ x: "-10px" }}
+                whileTap={{ x: "-10px" }}
+                transition={{ duration: 0.3 }}
+                src={leftarrow}
+                alt="left-arrow"
+                height={30}
+                width={20}
+              />
+            </div>
+          </p>
+          <p>
+            {MCalendarHelper.getFormattedDate(currentDate, "MMMM")}&nbsp;(
+            {MCalendarHelper.getFormattedDate(currentDate, "yyyy")})
+          </p>
+          <p>
+            <div onClick={handleNext} tabIndex={-1}>
+              <motion.img
+                animate={{ scale: 1 }}
+                whileTap={{ x: "10px" }}
+                whileHover={{ x: "10px" }}
+                transition={{ duration: 0.3 }}
+                src={rightarrow}
+                alt="right-arrow"
+                height={30}
+                width={20}
+              />
+            </div>
+          </p>
+        </motion.article>
+      </React.Fragment>
+    );
+  };
   return (
     <motion.div className="mcalendar-wrapper">
-      <motion.article className="mcalendar-full-month d-flex align-items-center justify-content-center m-1 p-1">
-        <p>
-          <div onClick={handlePrevious} tabIndex={-1}>
-            <motion.img
-              animate={{ scale: 1 }}
-              whileHover={{ x: "-10px" }}
-              whileTap={{ x: "-10px" }}
-              transition={{ duration: 0.3 }}
-              src={leftarrow}
-              alt="left-arrow"
-              height={30}
-              width={20}
-            />
-          </div>
-        </p>
-        <p>
-          {MCalendarHelper.getFormattedDate(currentDate, "MMMM")}&nbsp;(
-          {MCalendarHelper.getFormattedDate(currentDate, "yyyy")})
-        </p>
-        <p>
-          <div onClick={handleNext} tabIndex={-1}>
-            <motion.img
-              animate={{ scale: 1 }}
-              whileTap={{ x: "10px" }}
-              whileHover={{ x: "10px" }}
-              transition={{ duration: 0.3 }}
-              src={rightarrow}
-              alt="right-arrow"
-              height={30}
-              width={20}
-            />
-          </div>
-        </p>
-      </motion.article>
+      <Header />
       <motion.div
         className="mcalendar text-center"
         initial={{ opacity: 0 }}
@@ -182,7 +191,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
             const displayDate = MCalendarHelper.getFormattedDate(date, "d");
             const eventsLength = groupedEvents[formattedDate]?.length;
             const isSelectedDate = selectedDate.slcdate.includes(formattedDate);
-            const isCurrentDate = MCalendarHelper.isSameDate(date, currentDate);
+            const isCurrentDate = MCalendarHelper.isSameDay(date, currentDate);
             return (
               <motion.article
                 initial={{ scale: 0.9 }}
@@ -216,7 +225,12 @@ function Calendar({ events, onSelectDate }: MCalendar) {
       </motion.div>
       <motion.article className="d-flex w-100 m-1 align-items-baseline justify-content-center gap-3">
         <motion.button
-          className={`set-today-btn ${MCalendarHelper.isSameMoth(new Date(), currentDate) ? "disabled" : ""}`}
+          className={`set-today-btn ${
+            MCalendarHelper.isSameMoth(new Date(), currentDate) &&
+            MCalendarHelper.isSameYear(new Date(), currentDate)
+              ? "disabled"
+              : ""
+          }`}
           initial={{ scale: 1 }}
           whileTap={{ scale: 1.2 }}
           transition={{ duration: 0.5, type: "spring" }}
@@ -224,7 +238,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
             switchToToday();
             e.stopPropagation();
           }}
-          disabled={MCalendarHelper.isSameMoth(new Date(), currentDate)}
+          disabled={MCalendarHelper.isSameDate(new Date(), currentDate)}
         >
           Today
         </motion.button>
