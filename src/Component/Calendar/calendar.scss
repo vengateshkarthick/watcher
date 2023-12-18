@@ -115,3 +115,27 @@ $box-shadow: #f5f5f5;
     }
   }
 }
+
+
+.mcalendar-daily-view {
+  width: 500px;
+  height: 29rem;
+  overflow: hidden auto;
+  .today, .current-time {
+    height: 2.625rem;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    border-radius: 40px;
+    user-select: none;
+    pointer-events: none;
+    &.selected {
+      background-color: $primary;
+      color: #fff;
+    }
+  }
+  .current-time {
+    color: $text-color;
+    background-color: $hover-background-color;
+    
+  }
+}

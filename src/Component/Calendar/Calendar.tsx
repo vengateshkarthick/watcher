@@ -10,12 +10,13 @@ import "./calendar.scss";
 import { useCalendarState } from "../../store/bucket";
 import MCalendarHelper from "./helper";
 
-function Calendar({ events, onSelectDate }: MCalendar) {
+function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
   const [selectedDate, setSelectedDate] = React.useState<{
     slcdate: string;
     events?: [] | MEvents[];
   }>({ slcdate: "" });
 
+  
   const {
     currentDate,
     currentMonthStartDate,
@@ -26,7 +27,8 @@ function Calendar({ events, onSelectDate }: MCalendar) {
     movePreviousMonth,
     switchToToday,
   } = useCalendarState((state) => state);
-
+  
+  const [current_time, setCurrentTime] = React.useState<string>(MCalendarHelper.getFormattedDate(currentDate, "HH : mm z"));
   /**
    *  for filling the space left at starting of month in that week -
    *  get last date of previous month
@@ -121,6 +123,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
       <React.Fragment>
         <motion.article className="mcalendar-full-month d-flex align-items-center justify-content-center m-1 p-1">
           <p>
+            {/* need to remove this div a wrap an button with all:unset */}
             <div onClick={handlePrevious} tabIndex={-1}>
               <motion.img
                 animate={{ scale: 1 }}
@@ -156,10 +159,10 @@ function Calendar({ events, onSelectDate }: MCalendar) {
       </React.Fragment>
     );
   };
-  return (
-    <motion.div className="mcalendar-wrapper">
-      <Header />
-      <motion.div
+
+  const MonthlyView = (
+    <>
+     <motion.div
         className="mcalendar text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -177,13 +180,13 @@ function Calendar({ events, onSelectDate }: MCalendar) {
         <AnimatePresence>
           {previousMonthRemainigDays.map((bfd) => (
             <motion.article
-              key={bfd + "_empty"}
+              key={bfd + "_empty_prev_remanining_days"}
               className="mcalendar-date empty d-flex flex-column m-1"
             >
               {bfd}
             </motion.article>
           ))}
-          {daysInCurrentMonth.map((date) => {
+          {daysInCurrentMonth.map((date, idx) => {
             const formattedDate = MCalendarHelper.getFormattedDate(
               date,
               "dd/MM/yyyy"
@@ -203,7 +206,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
                 className={`mcalendar-date ${
                   isCurrentDate ? "current-date" : ""
                 } ${isSelectedDate ? "selected" : ""}  d-flex flex-column m-1 `}
-                key={`mcalendar-date-${displayDate}`}
+                key={`mcalendar-date-${displayDate}_${idx}`}
                 data-date={formattedDate}
                 onClick={(e) => handleSelect(e, formattedDate)}
               >
@@ -216,7 +219,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
           })}
           {nextMonthStartingDays.map((bfd) => (
             <motion.article
-              key={bfd + "_empty"}
+              key={bfd + "_empty_next_month_remaining_days"}
               className="mcalendar-date empty d-flex flex-column m-1"
             >
               {bfd}
@@ -247,6 +250,7 @@ function Calendar({ events, onSelectDate }: MCalendar) {
       <motion.article className="d-flex align-items-baseline justify-content-center gap-3">
         {lengend.map(({ color, label }) => (
           <div
+            key={label}
             className={`lengend ${color} d-flex justify-content-between align-items-center`}
           >
             <section className={`${color}`}>&nbsp;</section>
@@ -254,6 +258,37 @@ function Calendar({ events, onSelectDate }: MCalendar) {
           </div>
         ))}
       </motion.article>
+    </>
+  );
+
+  const intrId = setInterval(() => {
+    setCurrentTime(() => MCalendarHelper.getFormattedDate(new Date(), "HH : mm z"));
+  }, 1000);
+  
+  React.useEffect(() => {
+   return (() =>  {
+    if (intrId) clearInterval(intrId);
+   });
+  }, [])
+
+  const DailyView = (
+   <>
+    <motion.article className="mcalendar-daily-view text-center">
+      <div className="my-1 mx-auto row row-cols-12 justify-content-center align-items-center">
+        <div className="col-5 today selected text-center mx-auto">{`${MCalendarHelper.getFormattedDate(currentDate, "d")} - ${MCalendarHelper.getFormattedDate(currentDate, "eeee")}`}</div>
+        <div className="col-5 current-time text-center " key="current_time_interval">{current_time}</div>
+      </div>
+    </motion.article>
+   </>
+  );
+  const renderElement = {
+    "monthly" : MonthlyView,
+    "daily": DailyView,
+  };
+  return (
+    <motion.div className="mcalendar-wrapper">
+      <Header />
+      {renderElement[view]}
     </motion.div>
   );
 }

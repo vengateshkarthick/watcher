@@ -4,6 +4,8 @@ export interface Mweekdays {
     long: ["Sunday" & string, "Monday" & string, "Tuesday" & string, "Wednesday" & string, "Thursday" & string, "Friday" & string, "Saturday" & string];
 } 
 
+export type MViews  = "monthly" | "daily";
+
 export interface MEvents {
   title: string,
   startDate: string,
@@ -19,5 +21,6 @@ export interface MEvents {
 }
 export interface MCalendar {
   events?: Array<MEvents>,
+  view?: MViews,
   onSelectDate?: (currentDate: string, selectedEvents?:MEvents[]) => void,
 }
