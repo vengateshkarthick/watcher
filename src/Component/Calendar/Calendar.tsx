@@ -26,9 +26,12 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
     moveNextMonth,
     movePreviousMonth,
     switchToToday,
+    timeFormat,
+    timings,
   } = useCalendarState((state) => state);
   
   const [current_time, setCurrentTime] = React.useState<string>(MCalendarHelper.getFormattedDate(currentDate, "HH : mm z"));
+  const [currentHrIndex, setCurrentHrIndex] = React.useState<string>('0');
   /**
    *  for filling the space left at starting of month in that week -
    *  get last date of previous month
@@ -100,8 +103,8 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
         label: "Events",
       },
       {
-        color: "today",
-        label: "Today",
+        color: view === "monthly" ? "today" : "now",
+        label: view === "monthly" ? "Today" : "Now",
       },
     ];
   }, []);
@@ -271,6 +274,13 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
    });
   }, [])
 
+  React.useEffect(() => {
+    if (current_time) {
+      const [hr] = current_time.split(" ");
+      setCurrentHrIndex(() => hr);
+    }
+  }, [current_time])
+
   const DailyView = (
    <>
     <motion.article className="mcalendar-daily-view text-center">
@@ -278,6 +288,38 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
         <div className="col-5 today selected text-center mx-auto">{`${MCalendarHelper.getFormattedDate(currentDate, "d")} - ${MCalendarHelper.getFormattedDate(currentDate, "eeee")}`}</div>
         <div className="col-5 current-time text-center " key="current_time_interval">{current_time}</div>
       </div>
+      <AnimatePresence>
+        
+        <motion.article className="mcalender-timings">
+            {
+              timings[timeFormat].map((time, idx) => {
+                return (
+                  <>
+                  <div className="each-time d-flex h-100 w-100 justify-content-start gap-1  align-items-center" key={`each-time-${idx}`}>
+                    {<div className={`${time.includes(currentHrIndex) ? "now":  'not-now'}`}>&nbsp;</div>}
+                    <div>{time}</div>
+                  </div>
+                  <div className="events">&nbsp;</div>
+                  </>
+                  
+
+                );
+              })
+            }
+        </motion.article>
+        
+      </AnimatePresence>
+      <motion.article className="d-flex align-items-baseline justify-content-center gap-3">
+        {lengend.map(({ color, label }) => (
+          <div
+            key={label}
+            className={`lengend ${color} d-flex justify-content-between align-items-center`}
+          >
+            <section className={`${color}`}>&nbsp;</section>
+            <section>{label}</section>
+          </div>
+        ))}
+      </motion.article>
     </motion.article>
    </>
   );
