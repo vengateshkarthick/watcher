@@ -74,7 +74,7 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
   const nextMonthStartingDays = _.range(1, bufferDaysFromEnd.length + 1);
   const groupedEvents = _.groupBy(events, ({ startDate, startTime }) =>
     MCalendarHelper.getFormattedDate(
-      new Date(`${startDate}T${startTime}`),
+      new Date(`${startDate} ${startTime}`),
       "dd/MM/yyyy"
     )
   );
@@ -184,7 +184,7 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
           {previousMonthRemainigDays.map((bfd) => (
             <motion.article
               key={bfd + "_empty_prev_remanining_days"}
-              className="mcalendar-date empty d-flex flex-column m-1"
+              className="mcalendar-date empty d-flex m-1"
             >
               {bfd}
             </motion.article>
@@ -203,27 +203,24 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
               <motion.article
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
-                whileTap={{ scale: isSelectedDate ? 1 : 1.5 }}
-                whileHover={{ scale: isSelectedDate ? 1 : 1.5 }}
+                whileTap={{ scale: (isSelectedDate || eventsLength)  ? 1 : 1.5 }}
+                whileHover={{ scale: (isSelectedDate || eventsLength) ? 1 : 1.5 }}
                 transition={{ duration: 0.2, type: "spring" }}
-                className={`mcalendar-date ${
+                className={`mcalendar-date ${eventsLength ? "has-events" : ""} ${
                   isCurrentDate ? "current-date" : ""
-                } ${isSelectedDate ? "selected" : ""}  d-flex flex-column m-1 `}
+                } ${isSelectedDate ? "selected" : ""}  d-flex m-1 `}
                 key={`mcalendar-date-${displayDate}_${idx}`}
                 data-date={formattedDate}
                 onClick={(e) => handleSelect(e, formattedDate)}
               >
                 <motion.div className="display-date">{displayDate} {isNewYearFest ? <sup>🥳</sup> : ''}</motion.div>
-                <motion.div className="display-events">
-                  {eventsLength && <p className="rounded">+{eventsLength}</p>}
-                </motion.div>
               </motion.article>
             );
           })}
           {nextMonthStartingDays.map((bfd) => (
             <motion.article
               key={bfd + "_empty_next_month_remaining_days"}
-              className="mcalendar-date empty d-flex flex-column m-1"
+              className="mcalendar-date empty d-flex m-1"
             >
               {bfd}
             </motion.article>
