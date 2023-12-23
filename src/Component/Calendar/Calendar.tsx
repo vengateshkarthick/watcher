@@ -72,12 +72,21 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
     7
   );
   const nextMonthStartingDays = _.range(1, bufferDaysFromEnd.length + 1);
-  const groupedEvents = _.groupBy(events, ({ startDate, startTime }) =>
+  const groupedEvents = React.useMemo(() => (
+    _.groupBy(events, ({ startDate, startTime }) =>
     MCalendarHelper.getFormattedDate(
       new Date(`${startDate} ${startTime}`),
       "dd/MM/yyyy"
     )
-  );
+  )), [events]);
+  const timelyGroupedEvents = React.useMemo(() => (
+    _.groupBy(events, ({ startDate, startTime }) =>
+    MCalendarHelper.getFormattedDate(
+      new Date(`${startDate} ${startTime}`),
+      "HH:mm"
+    )
+  )
+), [events]);
   const handleSelect = (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
     formattedDate: string
@@ -126,7 +135,6 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
       <React.Fragment>
         <motion.article className="mcalendar-full-month d-flex align-items-center justify-content-center m-1 p-1">
           <p>
-            {/* need to remove this div a wrap an button with all:unset */}
             <div onClick={handlePrevious} tabIndex={-1}>
               <motion.img
                 animate={{ scale: 1 }}
@@ -290,6 +298,8 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
         <motion.article className="mcalender-timings">
             {
               timings[timeFormat].map((time, idx) => {
+                const hasEventAtMoment = timelyGroupedEvents[time]
+                console.table(hasEventAtMoment)
                 return (
                   <>
                   <div className="each-time d-flex h-100 w-100 justify-content-start gap-1  align-items-center" key={`each-time-${idx}`}>
