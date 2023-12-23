@@ -2,6 +2,7 @@
   "name": "watcher",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
     "start": "vite",
     "build": "vite build",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@types/date-fns": "^2.6.0",
     "@types/lodash": "^4.14.202",
+    "@types/node": "^20.10.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "process": "^0.11.10"

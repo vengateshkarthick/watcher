@@ -15,7 +15,6 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
     slcdate: string;
     events?: [] | MEvents[];
   }>({ slcdate: "" });
-
   
   const {
     currentDate,
@@ -76,7 +75,7 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
     _.groupBy(events, ({ startDate, startTime }) =>
     MCalendarHelper.getFormattedDate(
       new Date(`${startDate} ${startTime}`),
-      "dd/MM/yyyy"
+      "yyyy-MM-dd"
     )
   )), [events]);
   const timelyGroupedEvents = React.useMemo(() => (
@@ -200,10 +199,10 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
           {daysInCurrentMonth.map((date, idx) => {
             const formattedDate = MCalendarHelper.getFormattedDate(
               date,
-              "dd/MM/yyyy"
+              "yyyy-MM-dd"
             );
             const displayDate = MCalendarHelper.getFormattedDate(date, "d");
-            const isNewYearFest = formattedDate.includes("01/01");
+            const isNewYearFest = formattedDate.includes("01-01");
             const eventsLength = groupedEvents[formattedDate]?.length;
             const isSelectedDate = selectedDate.slcdate.includes(formattedDate);
             const isCurrentDate = MCalendarHelper.isSameDay(date, currentDate);
@@ -299,7 +298,7 @@ function Calendar({ events, onSelectDate, view = "monthly" }: MCalendar) {
             {
               timings[timeFormat].map((time, idx) => {
                 const hasEventAtMoment = timelyGroupedEvents[time]
-                console.table(hasEventAtMoment)
+                
                 return (
                   <>
                   <div className="each-time d-flex h-100 w-100 justify-content-start gap-1  align-items-center" key={`each-time-${idx}`}>
