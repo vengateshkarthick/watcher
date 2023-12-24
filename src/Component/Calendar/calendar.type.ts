@@ -23,4 +23,5 @@ export interface MCalendar {
   events?: Array<MEvents>,
   view?: MViews,
   onSelectDate?: (currentDate: string, selectedEvents?:MEvents[]) => void,
+  onSelectTime?: (currentDate: string, selectedEvents?:MEvents[]) => void,
 }
