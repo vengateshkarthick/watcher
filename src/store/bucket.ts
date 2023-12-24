@@ -81,17 +81,18 @@ class UseCalendarHelper {
 }
 
 interface MCalendarState {
-    currentDate: Date,
-    currentMonthStartDate: Date,
-    currentMonthEndDate: Date,
-    daysInCurrentMonth: Array<Date>,
-    movePreviousMonth: () => void,
-    moveNextMonth: () => void,
-    currentView: 'monthly' | 'daily',
-    weekDaysInShort: Mweekdays['short'],
-    switchView: () => void,
-    events?: MEvents[],
-    timeFormat: "24hr" | "12hr",
+    currentDate: Date;
+    setCurrentDate?: (date: string) => void;
+    currentMonthStartDate: Date;
+    currentMonthEndDate: Date;
+    daysInCurrentMonth: Array<Date>;
+    movePreviousMonth: () => void;
+    moveNextMonth: () => void;
+    currentView: 'monthly' | 'daily';
+    weekDaysInShort: Mweekdays['short'];
+    switchView: () => void;
+    events?: MEvents[];
+    timeFormat: "24hr" | "12hr";
     switchToToday: () => void;
     timings: typeof timeSlots;
 }
