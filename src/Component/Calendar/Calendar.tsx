@@ -1,5 +1,5 @@
 import React from "react";
-import { MCalendar } from "./calendar.type";
+import { Hresponse, MCalendar } from "./calendar.type";
 import * as _ from "lodash";
 import { motion } from "framer-motion";
 import * as _dutlis from "date-fns";
@@ -7,9 +7,16 @@ import "./calendar.scss";
 import MonthlyView from "./views/Monthly";
 import DailyView from "./views/DailyView";
 import Header from "./Header";
+import { useCalendarState } from "../../store/bucket";
+import { usePublicHoldiday } from "../usePublicHoliday";
 
 function Calendar({ view = "monthly", ...rest }: MCalendar) {
- 
+  const setPublicHolidays = useCalendarState((state) => state.setPublicHolidays)
+  React.useEffect(() => {
+   if (setPublicHolidays) {
+    usePublicHoldiday().then(res => setPublicHolidays(res));
+   }
+  }, []);
   const renderElement = {
     "monthly" : MonthlyView,
     "daily": DailyView,
@@ -18,7 +25,7 @@ function Calendar({ view = "monthly", ...rest }: MCalendar) {
   return (
     <motion.div className="mcalendar-wrapper">
       <Header />
-      <CalendarComponent {...rest}/>
+      <CalendarComponent {...rest} />
     </motion.div>
   );
 }

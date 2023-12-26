@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import * as _ from "lodash";
 import * as _dutlis from "date-fns";
-import { MEvents, Mweekdays } from "../Component/Calendar/calendar.type";
+import { Hresponse, MEvents, Mweekdays } from "../Component/Calendar/calendar.type";
 
 enum endate {
   'm0' = 31,
@@ -95,6 +95,8 @@ interface MCalendarState {
     timeFormat: "24hr" | "12hr";
     switchToToday: () => void;
     timings: typeof timeSlots;
+    public_holidays?: { isError?: boolean, response?: Hresponse[], code?: string | number, message?: string };
+    setPublicHolidays?: (hl: { isError?: boolean, response?: Hresponse[], code?: string | number, message?: string }) => void;
 }
 
 export const useCalendarState = create<MCalendarState>((set) => ({
@@ -153,6 +155,8 @@ export const useCalendarState = create<MCalendarState>((set) => ({
           daysInCurrentMonth: nDays,
         }
       });
-    }
+    },
+    public_holidays: { isError: false, code: '' },
+    setPublicHolidays: (hl: { isError?: boolean, response?: Hresponse[], code?: string | number, message?: string }) => set({ public_holidays: hl }),
 
 }));

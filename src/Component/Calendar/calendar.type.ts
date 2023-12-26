@@ -26,3 +26,9 @@ export interface MCalendar {
   onSelectDate?: (currentDate: string, selectedEvents?:MEvents[]) => void,
   onSelectTime?: (currentDate: string, selectedEvents?:MEvents[]) => void,
 }
+
+export interface Hresponse {
+  name: string;
+  date: string |  { iso: string };
+  type: Array<string>;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { MCalendar, MEvents } from "../calendar.type";
+import { Hresponse, MCalendar, MEvents } from "../calendar.type";
 import * as _ from "lodash";
 import { AnimatePresence, motion } from "framer-motion";
 import * as _dutlis from "date-fns";
@@ -20,6 +20,7 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
     daysInCurrentMonth,
     weekDaysInShort,
     switchToToday,
+    public_holidays,
   } = useCalendarState((state) => state);
 
   /**

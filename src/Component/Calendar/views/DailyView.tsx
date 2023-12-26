@@ -1,5 +1,5 @@
 import React from "react";
-import { MCalendar, MEvents } from "../calendar.type";
+import { Hresponse, MCalendar, MEvents } from "../calendar.type";
 import * as _ from "lodash";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCalendarState } from "../../../store/bucket";
@@ -13,7 +13,7 @@ function DailyView({ events, onSelectTime }: MCalendar) {
     events?: [] | MEvents[];
   }>({ slcdate: "" });
 
-  const { currentDate, timeFormat, timings } = useCalendarState(
+  const { currentDate, timeFormat, timings, public_holidays } = useCalendarState(
     (state) => state
   );
 

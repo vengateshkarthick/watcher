@@ -5,11 +5,9 @@
  *
  */
 
-interface Hresponse {
-  name: string;
-  date: { iso: string };
-  type: Array<string>;
-}
+import { Hresponse } from "../Calendar/calendar.type";
+
+
 
 const error = {
   401: "Unauthorized Missing or incorrect API token in header",
@@ -35,11 +33,15 @@ export async function usePublicHoldiday(country = "in", year = "2023") {
     response: { holidays: Hresponse[]; meta: { code: 200 | 429 | 500 | 401 } };
   } = await response.json();
   if (code === 200) {
-    return holidays?.map(({ name, date, type }) => ({
-      name,
-      date: date.iso,
-      type,
-    }));
+    const public_holidays = holidays?.map(({ name, date, type }) => {
+      const { iso } = date as { iso : string}
+      return ({
+        name,
+        date: iso,
+        type,
+    });
+    });
+    return ({ response: public_holidays, isError: false, code, message: "Success" })
   }
-  return [{ status: code, message: error[`${code}`] || error[500] }];
+  return { code, message: error[`${code}`] || error[500], isError: true };
 }
