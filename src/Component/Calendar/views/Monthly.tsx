@@ -1,11 +1,12 @@
 import React from "react";
-import { Hresponse, MCalendar, MEvents } from "../calendar.type";
+import { MCalendar, MEvents } from "../calendar.type";
 import * as _ from "lodash";
 import { AnimatePresence, motion } from "framer-motion";
 import * as _dutlis from "date-fns";
 import { useCalendarState } from "../../../store/bucket";
 import MCalendarHelper from "../helper";
 import "../calendar.scss";
+import EventPopperBox from "../EventPopperBox";
 
 function MonthlyView({ events, onSelectDate }: MCalendar) {
   const [selectedDate, setSelectedDate] = React.useState<{
@@ -22,6 +23,11 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
     switchToToday,
     public_holidays,
   } = useCalendarState((state) => state);
+
+  const gpholidays = React.useMemo(() => {
+    const { response } = public_holidays ?? { response: []};
+    return _.groupBy(response, ({ date }) => date )
+  }, [public_holidays]);
 
   /**
    *  for filling the space left at starting of month in that week -
@@ -112,27 +118,35 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
       );
       const displayDate = MCalendarHelper.getFormattedDate(date, "d");
       const isNewYearFest = formattedDate.includes("01-01");
+      const pbEvent = gpholidays[formattedDate];
       const eventsLength = groupedEvents[formattedDate]?.length;
       const isSelectedDate = selectedDate.slcdate.includes(formattedDate);
       const isCurrentDate = MCalendarHelper.isSameDay(date, currentDate);
       return (
+        <>
         <motion.article
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           whileTap={{ scale: isSelectedDate || eventsLength ? 1 : 1.5 }}
           whileHover={{ scale: isSelectedDate || eventsLength ? 1 : 1.5 }}
           transition={{ duration: 0.2, type: "spring" }}
-          className={`mcalendar-date ${eventsLength ? "has-events" : ""} ${
+          className={`mcalendar-date ${(eventsLength || pbEvent?.length) ? "has-events" : ""} ${
             isCurrentDate ? "current-date" : ""
           } ${isSelectedDate ? "selected" : ""}  d-flex m-1 `}
           key={`mcalendar-date-${displayDate}_${idx}`}
           data-date={formattedDate}
           onClick={(e) => handleSelect(e, formattedDate)}
+          data-tooltip-id={`popper-${formattedDate}`}
         >
           <motion.div className="display-date">
             {displayDate} {isNewYearFest ? <sup>🥳</sup> : ""}
           </motion.div>
         </motion.article>
+        {
+          pbEvent?.length &&  <EventPopperBox id={`popper-${formattedDate}`} public_events={pbEvent} custom_events={groupedEvents[formattedDate]} />
+        }
+        
+         </>
       );
     });
 

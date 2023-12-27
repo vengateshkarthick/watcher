@@ -1,5 +1,5 @@
 import React from "react";
-import { Hresponse, MCalendar, MEvents } from "../calendar.type";
+import { MCalendar, MEvents } from "../calendar.type";
 import * as _ from "lodash";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCalendarState } from "../../../store/bucket";

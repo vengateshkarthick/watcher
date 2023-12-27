@@ -1,3 +1,5 @@
+import { PlacesType } from "react-tooltip";
+
 export type Mremainder = "1800" | "3600" | "86400" | "600";
 export interface Mweekdays {
     short: [ "Sun" & string, "Mon" & string, "Tue" & string, "Wed" & string, "Thur" & string, "Fri" & string, "Sat" & string];
@@ -31,4 +33,11 @@ export interface Hresponse {
   name: string;
   date: string |  { iso: string };
   type: Array<string>;
+}
+
+export interface EventPopper {
+  id: string;
+  place?: PlacesType;
+  public_events: Hresponse[];
+  custom_events: MEvents[];
 }

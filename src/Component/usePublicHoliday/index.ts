@@ -21,16 +21,18 @@ export async function usePublicHoldiday(country = "in", year = "2023") {
     year,
   });
   const response = await fetch(
-    `https://calendarific.com/api/v2?${queryParams}`,
+    `https://calendarific.com/api/v2/holidays?${queryParams}`,
     { method: "GET" }
   );
   const {
+    meta: { code },
     response: {
       holidays,
-      meta: { code },
+      
     },
   }: {
-    response: { holidays: Hresponse[]; meta: { code: 200 | 429 | 500 | 401 } };
+    meta: { code: 200 | 429 | 500 | 401 }
+    response: { holidays: Hresponse[] };
   } = await response.json();
   if (code === 200) {
     const public_holidays = holidays?.map(({ name, date, type }) => {
