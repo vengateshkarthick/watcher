@@ -25,8 +25,8 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
   } = useCalendarState((state) => state);
 
   const gpholidays = React.useMemo(() => {
-    const { response } = public_holidays ?? { response: []};
-    return _.groupBy(response, ({ date }) => date )
+    const { response } = public_holidays ?? { response: [] };
+    return _.groupBy(response, ({ date }) => date);
   }, [public_holidays]);
 
   /**
@@ -59,6 +59,7 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
       );
     }
   }
+
   /**
    *  for filling the space left at ending of the month in that week -
    *  get buffer days from the end of the month to 7
@@ -109,9 +110,9 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
       },
     ];
   }, []);
-
-  const renderExactDays = () =>
-    daysInCurrentMonth.map((date, idx) => {
+  
+  const renderExactDays = () => {
+    return daysInCurrentMonth.map((date, idx) => {
       const formattedDate = MCalendarHelper.getFormattedDate(
         date,
         "yyyy-MM-dd"
@@ -124,34 +125,38 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
       const isCurrentDate = MCalendarHelper.isSameDay(date, currentDate);
       return (
         <>
-        <motion.article
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-          whileTap={{ scale: isSelectedDate || eventsLength ? 1 : 1.5 }}
-          whileHover={{ scale: isSelectedDate || eventsLength ? 1 : 1.5 }}
-          transition={{ duration: 0.2, type: "spring" }}
-          className={`mcalendar-date ${(eventsLength || pbEvent?.length) ? "has-events" : ""} ${
-            isCurrentDate ? "current-date" : ""
-          } ${isSelectedDate ? "selected" : ""}  d-flex m-1 `}
-          key={`mcalendar-date-${displayDate}_${idx}`}
-          data-date={formattedDate}
-          onClick={(e) => handleSelect(e, formattedDate)}
-          data-tooltip-id={`popper-${formattedDate}`}
-        >
-          <motion.div className="display-date">
-            {displayDate} {isNewYearFest ? <sup>🥳</sup> : ""}
-          </motion.div>
-        </motion.article>
-        {
-          pbEvent?.length &&  <EventPopperBox id={`popper-${formattedDate}`} public_events={pbEvent} custom_events={groupedEvents[formattedDate]} />
-        }
-        
-         </>
+          <motion.article
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            whileTap={{ scale: isSelectedDate || eventsLength ? 1 : 1.5 }}
+            whileHover={{ scale: isSelectedDate || eventsLength ? 1 : 1.5 }}
+            transition={{ duration: 0.2, type: "spring" }}
+            className={`mcalendar-date ${
+              eventsLength || pbEvent?.length ? "has-events" : ""
+            } ${isCurrentDate ? "current-date" : ""} ${
+              isSelectedDate ? "selected" : ""
+            }  d-flex m-1 `}
+            key={`mcalendar-date-${displayDate}_${idx}`}
+            onClick={(e) => handleSelect(e, formattedDate)}
+            data-tooltip-id={`popper-${formattedDate}`}
+          >
+            <motion.div className="display-date">
+              {displayDate} {isNewYearFest ? <sup>🥳</sup> : ""}
+            </motion.div>
+          </motion.article>
+          {pbEvent?.length && (
+            <EventPopperBox
+              id={`popper-${formattedDate}`}
+              public_events={pbEvent}
+              custom_events={groupedEvents[formattedDate]}
+            />
+          )}
+        </>
       );
     });
-
+  };
   return (
-    <>
+    <div key="monthly">
       <motion.div
         className="mcalendar text-center"
         initial={{ opacity: 0 }}
@@ -166,26 +171,24 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
             {day}
           </motion.article>
         ))}
-        {renderExactDays()}
-        <AnimatePresence>
-          {previousMonthRemainigDays.map((bfd) => (
-            <motion.article
-              key={bfd + "_empty_prev_remanining_days"}
-              className="mcalendar-date empty d-flex m-1"
-            >
-              {bfd}
-            </motion.article>
-          ))}
 
-          {nextMonthStartingDays.map((bfd) => (
-            <motion.article
-              key={bfd + "_empty_next_month_remaining_days"}
-              className="mcalendar-date empty d-flex m-1"
-            >
-              {bfd}
-            </motion.article>
-          ))}
-        </AnimatePresence>
+        {previousMonthRemainigDays.map((bfd) => (
+          <motion.article
+            key={bfd + "_empty_prev_remanining_days"}
+            className="mcalendar-date empty d-flex m-1"
+          >
+            {bfd}
+          </motion.article>
+        ))}
+        {renderExactDays()}
+        {nextMonthStartingDays.map((bfd) => (
+          <motion.article
+            key={bfd + "_empty_next_month_remaining_days"}
+            className="mcalendar-date empty d-flex m-1"
+          >
+            {bfd}
+          </motion.article>
+        ))}
       </motion.div>
       <motion.article className="d-flex w-100 m-1 align-items-baseline justify-content-center gap-3">
         <motion.button
@@ -218,7 +221,7 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
           </div>
         ))}
       </motion.article>
-    </>
+    </div>
   );
 }
 

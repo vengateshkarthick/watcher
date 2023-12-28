@@ -5,11 +5,15 @@ import { useCalendarState } from "../../store/bucket";
 import * as _dutlis from "date-fns";
 import rightarrow from "../../assests/right.svg";
 import leftarrow from "../../assests/left.svg";
+import info from "../../assests/info.svg";
 import MCalendarHelper from "./helper";
 import "./calendar.scss";
+import EventPopperBox from "./EventPopperBox";
+import { Header as MHeader } from './calendar.type';
 
-function Header() {
-  const { currentDate, moveNextMonth, movePreviousMonth } = useCalendarState(
+
+function Header({ showInfoIcon, eventDate }: MHeader ) {
+  const { currentDate, moveNextMonth, movePreviousMonth, public_holidays } = useCalendarState(
     (state) => state
   );
 
@@ -22,6 +26,13 @@ function Header() {
     moveNextMonth();
     e.stopPropagation();
   };
+
+  const formattedDate = MCalendarHelper.getFormattedDate(eventDate || currentDate, 'yyyy-MM-dd')
+  const gpholidays = React.useMemo(() => {
+    const { response } = public_holidays ?? { response: []};
+    return _.groupBy(response, ({ date }) => date );
+  }, [public_holidays]);
+
 
   return (
     <React.Fragment>
@@ -58,6 +69,21 @@ function Header() {
             />
           </div>
         </p>
+        {
+          showInfoIcon && 
+          <p>
+            <div data-tooltip-id={`${formattedDate}-info`}>
+               <motion.img
+                src={info}
+                alt="right-arrow"
+                height={30}
+                width={20}
+               />
+            </div>
+            <EventPopperBox id={`${formattedDate}-info`} place="bottom" public_events={gpholidays[formattedDate]} />
+          </p>
+          
+        }
       </motion.article>
     </React.Fragment>
   );

@@ -11,12 +11,24 @@ import { useCalendarState } from "../../store/bucket";
 import { usePublicHoldiday } from "../usePublicHoliday";
 import 'react-toastify/dist/ReactToastify.css';
 import "./calendar.scss";
+import MCalendarHelper from "./helper";
+
+const renderElement = {
+  "monthly" : MonthlyView,
+  "daily": DailyView,
+}; 
 
 function Calendar({ view = "monthly", ...rest }: MCalendar) {
-  const setPublicHolidays = useCalendarState((state) => state.setPublicHolidays)
+  const [currentEventDate, setEventDate] = React.useState<Date>();
+  const { setPublicHolidays, currentYear } = useCalendarState((state) => {
+    return {
+      setPublicHolidays: state.setPublicHolidays,
+      currentYear: MCalendarHelper.getFormattedDate(state.currentDate, "yyyy"),
+    }
+  });
   React.useEffect(() => {
    if (setPublicHolidays) {
-    usePublicHoldiday()
+    usePublicHoldiday("in", currentYear)
     .then(res => {
       setPublicHolidays(res)
       if (res.isError) {
@@ -30,16 +42,17 @@ function Calendar({ view = "monthly", ...rest }: MCalendar) {
       }
     })
    }
-  }, []);
-  const renderElement = {
-    "monthly" : MonthlyView,
-    "daily": DailyView,
-  };
+  }, [currentYear]);
+
+  const eventDateRef = React.useRef<Date>();
+
+ 
+  
   const CalendarComponent = renderElement[view];
   return (
     <motion.div className="mcalendar-wrapper">
-      <Header />
-      <CalendarComponent {...rest} />
+      <Header showInfoIcon={view === "daily"} eventDate={currentEventDate} />
+      <CalendarComponent {...rest} key={currentYear} setEventDate={setEventDate}/>
       <ToastContainer />
     </motion.div>
   );

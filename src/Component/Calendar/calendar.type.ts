@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { PlacesType } from "react-tooltip";
 
 export type Mremainder = "1800" | "3600" | "86400" | "600";
@@ -38,6 +39,12 @@ export interface Hresponse {
 export interface EventPopper {
   id: string;
   place?: PlacesType;
-  public_events: Hresponse[];
-  custom_events: MEvents[];
+  public_events?: Hresponse[];
+  custom_events?: MEvents[];
+}
+
+export interface Header {
+  showInfoIcon: boolean;
+  cusotmInfoContent?: ReactNode;
+  eventDate?: Date 
 }

@@ -37,6 +37,13 @@ class MCalendarHelper {
    }
 
 
+   static moveToNextDay(date: Date) {
+    return _dateutils.add(date, { days: 1 })
+   }
+   static moveToPrevDay(date: Date) {
+    return _dateutils.sub(date, { days: 1 })
+   }
+
 
 
 }

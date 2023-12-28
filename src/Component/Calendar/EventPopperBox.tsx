@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Tooltip } from 'react-tooltip';
-import bell from '../../assests/bell.svg';
+// import bell from '../../assests/bell.svg';
 import { EventPopper } from './calendar.type';
 import './calendar.scss';
 
@@ -19,7 +19,7 @@ function EventPopperBox({ id, place = "right", public_events }:EventPopper) {
       >
         <div className='event-popper-box-container p-1'>
            <div className='public-events d-flex flex-column justify-content-start align-items-start'>
-            <header className='w-100'><img src={bell} alt='bell-sing' /> Public holidays</header>
+            <header className='w-100'> Public holidays</header>
             <ol>
             {
                

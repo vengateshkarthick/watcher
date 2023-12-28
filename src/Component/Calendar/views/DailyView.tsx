@@ -5,20 +5,28 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCalendarState } from "../../../store/bucket";
 import * as _dutlis from "date-fns";
 import MCalendarHelper from "../helper";
+import backward from "../../../assests/backward.svg";
+import forward from "../../../assests/forward.svg";
 import "../calendar.scss";
 
-function DailyView({ events, onSelectTime }: MCalendar) {
+function DailyView({ events, onSelectTime, setEventDate }: MCalendar & { setEventDate?: (p: Date) => void }) {
   const [selectedDate, setSelectedDate] = React.useState<{
     slcdate: string;
     events?: [] | MEvents[];
   }>({ slcdate: "" });
 
-  const { currentDate, timeFormat, timings, public_holidays } = useCalendarState(
-    (state) => state
-  );
+  const { currentDate, timeFormat, timings, daysInCurrentMonth } =
+    useCalendarState((state) => state);
+
+  const [day, setDay] = React.useState(() => new Date(currentDate));
+  const [isDisable, setIsDisabled] = React.useState({
+    forward: false,
+    backward: false,
+  });
+
 
   const [current_time, setCurrentTime] = React.useState<string>(
-    MCalendarHelper.getFormattedDate(currentDate, "HH : mm z")
+    MCalendarHelper.getFormattedDate(day, "HH : mm z")
   );
   const [currentHrIndex, setCurrentHrIndex] = React.useState<string>("0");
 
@@ -32,6 +40,8 @@ function DailyView({ events, onSelectTime }: MCalendar) {
       ),
     [events]
   );
+
+  
   const handleSelect = (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
     time: string
@@ -39,7 +49,7 @@ function DailyView({ events, onSelectTime }: MCalendar) {
     let mod: any = { slcdate: "", events: [] };
     if (time && timelyGroupedEvents[time]) {
       mod.events = timelyGroupedEvents[time];
-      mod.scldate = currentDate;
+      mod.scldate = day;
     }
     setSelectedDate(() => mod);
     e.stopPropagation();
@@ -81,6 +91,33 @@ function DailyView({ events, onSelectTime }: MCalendar) {
     }
   }, [current_time]);
 
+  React.useEffect(() => {
+    if (day) {
+      setEventDate?.(day);
+    }
+
+  }, [day]);
+
+  const movePrev = (e: any) => {
+    e?.stopPropagation();
+    const newDate = MCalendarHelper.moveToPrevDay(day);
+    if (daysInCurrentMonth.find((item) => MCalendarHelper.getFormattedDate(item, "yyyy-MM-dd") === MCalendarHelper.getFormattedDate(newDate, "yyyy-MM-dd") )) {
+      setDay(() => newDate);
+      if (isDisable.backward)
+        setIsDisabled((prev) => ({ ...prev, backward: false }));
+    } else setIsDisabled((prev) => ({ ...prev, backward: true }));
+  };
+
+  const moveNext = (e:any) => {
+    e?.stopPropagation();
+    const newDate = MCalendarHelper.moveToNextDay(day);
+    if (daysInCurrentMonth.find((item) => MCalendarHelper.getFormattedDate(item, "yyyy-MM-dd") === MCalendarHelper.getFormattedDate(newDate, "yyyy-MM-dd") )) {
+      setDay(() => newDate);
+      if (isDisable.forward)
+        setIsDisabled((prev) => ({ ...prev, forward: false }));
+    } else setIsDisabled((prev) => ({ ...prev, forward: true }));
+  };
+
   const renderTimeScale = () => (
     <motion.article className="mcalender-timings">
       {timings[timeFormat].map((time, idx) => {
@@ -109,22 +146,61 @@ function DailyView({ events, onSelectTime }: MCalendar) {
       })}
     </motion.article>
   );
+
   return (
     <>
       <motion.article className="mcalendar-daily-view text-center">
-        <div className="my-1 mx-auto row row-cols-12 justify-content-center align-items-center">
-          <div className="col-5 today selected text-center mx-auto">{`${MCalendarHelper.getFormattedDate(
-            currentDate,
-            "d"
-          )} - ${MCalendarHelper.getFormattedDate(currentDate, "eeee")}`}</div>
+        <div className="my-1 mx-1 row row-cols-12 gap-3 justify-content-evenly align-items-center info-container">
+          <div className="col-5 today selected text-center">
+            <div className="d-flex justify-content-between align-items-center">
+              <article
+                onClick={movePrev}
+                tabIndex={-1}
+                className={`${isDisable.backward ? "disabled" : " "}`}
+              >
+                <motion.img
+                  animate={{ scale: 1 }}
+                  whileTap={{  x: `${isDisable.backward ? '0' : '10px'}` }}
+                  transition={{ duration: 0.2 }}
+                  src={backward}
+                  className="mx-1"
+                  alt="right-arrow"
+                  height={20}
+                  width={18}
+                />
+              </article>
+              <article>
+                {`${MCalendarHelper.getFormattedDate(
+                  day,
+                  "d"
+                )} - ${MCalendarHelper.getFormattedDate(day, "eeee")}`}
+              </article>
+              <article
+                onClick={moveNext}
+                tabIndex={-1}
+                className={`${isDisable.forward ? "disabled" : " "}`}
+              >
+                <motion.img
+                  animate={{ scale: 1 }}
+                  whileTap={{  x: `${isDisable.forward ? '0' : '10px'}` }}
+                  transition={{ duration: 0.2 }}
+                  src={forward}
+                  className="mx-1"
+                  alt="right-arrow"
+                  height={20}
+                  width={18}
+                />
+              </article>
+            </div>
+          </div>
           <div
-            className="col-5 current-time text-center "
+            className="col-4 current-time text-center "
             key="current_time_interval"
           >
             {current_time}
           </div>
         </div>
-        <AnimatePresence>{renderTimeScale()}</AnimatePresence>
+        {renderTimeScale()}
         <motion.article className="d-flex align-items-baseline justify-content-center gap-3">
           {lengend.map(({ color, label }) => (
             <div
