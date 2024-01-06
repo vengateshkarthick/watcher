@@ -1,0 +1,22 @@
+$secondary: #f1f2f7;
+
+@mixin smallBox($background-color) {
+    height: 0.9rem;
+    width: 0.9rem;
+    background-color: $background-color;
+    border-radius: 4px;
+}
+
+.popup {
+    box-sizing: border-box;
+    background-color: $secondary;
+    .card-body {
+      padding: 1rem;
+    }
+    .name, .type {
+       font-size: 1.5rem;
+    }
+    .box {
+        @include smallBox(#717FF7);
+    }
+}
