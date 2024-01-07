@@ -227,8 +227,8 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
         ))}
       </motion.article>
       {
-        selectedDate.slcdate && position.canShow && (
-          <Popup top={`${position.y}px`} left={`${position.x}px`} public_holidays={gpholidays[selectedDate.slcdate] || []} canShow={position.canShow} onClose={handleClose} />
+        selectedDate.slcdate && gpholidays[selectedDate.slcdate]?.length && (
+          <Popup top={`${position.y}px`} left={`${position.x}px`} public_holidays={gpholidays[selectedDate.slcdate]} canShow={position.canShow} onClose={handleClose} />
         )
       }
       

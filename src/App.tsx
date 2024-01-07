@@ -47,7 +47,7 @@ function App() {
   return (
     <div className="container-fluid p-0 mcalendar-container w-100">
       <Calendar view="monthly" events={exampleEvents}/>
-      {/* <Calendar view="daily" events={exampleEvents} /> */}
+      <Calendar view="daily" events={exampleEvents} />
     </div>
   );
 }
