@@ -1,22 +1,64 @@
 $secondary: #f1f2f7;
+$hover-background-color: #263e581a;
+$primary: #263e58;
+$primary-tilt: #263e58cc;
+$secondary: #f1f2f7;
+$secondary-tilt: #263e5869;
 
 @mixin smallBox($background-color) {
-    height: 0.9rem;
-    width: 0.9rem;
-    background-color: $background-color;
-    border-radius: 4px;
+  height: 0.9rem;
+  width: 0.9rem;
+  background-color: $background-color;
+  border-radius: 4px;
 }
 
 .popup {
-    box-sizing: border-box;
-    background-color: $secondary;
-    .card-body {
-      padding: 1rem;
+  width: 350px;
+  box-sizing: border-box;
+  background-color: #fff;
+  z-index: 5;
+  border-radius: 12px;
+  position: absolute;
+  padding: 1rem;
+  .close {
+    position: absolute;
+    cursor: pointer;
+    right: 0;
+    padding: 0.4rem;
+    border-radius: 50%;
+    display: flex;
+    top: 10px;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+      background-color: $hover-background-color;
     }
-    .name, .type {
-       font-size: 1.5rem;
-    }
-    .box {
-        @include smallBox(#717FF7);
-    }
+  }
+  .card-body {
+    padding: 1rem;
+    height: 150px;
+    overflow-y: auto;
+   .my-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 10px;
+    color: $primary-tilt;
+   }
+   .no-event {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $secondary-tilt;
+   }
+    
+  }
+  .name,
+  .type {
+    font-size: 0.8rem;
+  }
+  .box {
+    @include smallBox(#717ff7);
+  }
 }

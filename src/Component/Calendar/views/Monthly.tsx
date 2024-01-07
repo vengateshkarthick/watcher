@@ -1,19 +1,20 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import { MCalendar, MEvents } from "../calendar.type";
 import * as _ from "lodash";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import * as _dutlis from "date-fns";
 import { useCalendarState } from "../../../store/bucket";
 import MCalendarHelper from "../helper";
 import "../calendar.scss";
-import EventPopperBox from "../EventPopperBox";
+import Popup from "../Popup/Popup";
 
 function MonthlyView({ events, onSelectDate }: MCalendar) {
   const [selectedDate, setSelectedDate] = React.useState<{
     slcdate: string;
     events?: [] | MEvents[];
   }>({ slcdate: "" });
-
+  const [position, setPosition] = React.useState<{x: number, y: number, canShow: boolean}>({x: 0, y: 0, canShow: false})
   const {
     currentDate,
     currentMonthStartDate,
@@ -91,6 +92,10 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
         mod.events = groupedEvents[formattedDate];
     }
     setSelectedDate(() => mod);
+    let { left, top } = e.currentTarget.getBoundingClientRect();
+    if ((top + 340) >= document.body.clientHeight) top = top - 170;
+    if ((left + 350) >= document.body.clientWidth) left = left - 200;
+    setPosition(() => ({ x: left + 50, y: top + 10, canShow: true }));
     e.stopPropagation();
   };
   React.useEffect(() => {
@@ -110,6 +115,11 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
       },
     ];
   }, []);
+
+  const handleClose = () => {
+    setPosition(prev => ({...prev, canShow: false}));
+    setSelectedDate({ slcdate: '', events: []});
+  }
   
   const renderExactDays = () => {
     return daysInCurrentMonth.map((date, idx) => {
@@ -139,18 +149,13 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
             key={`mcalendar-date-${displayDate}_${idx}`}
             onClick={(e) => handleSelect(e, formattedDate)}
             data-tooltip-id={`popper-${formattedDate}`}
+            data-idx={idx}
           >
             <motion.div className="display-date">
               {displayDate} {isNewYearFest ? <sup>🥳</sup> : ""}
             </motion.div>
           </motion.article>
-          {pbEvent?.length && (
-            <EventPopperBox
-              id={`popper-${formattedDate}`}
-              public_events={pbEvent}
-              custom_events={groupedEvents[formattedDate]}
-            />
-          )}
+        
         </>
       );
     });
@@ -221,6 +226,12 @@ function MonthlyView({ events, onSelectDate }: MCalendar) {
           </div>
         ))}
       </motion.article>
+      {
+        selectedDate.slcdate && position.canShow && (
+          <Popup top={`${position.y}px`} left={`${position.x}px`} public_holidays={gpholidays[selectedDate.slcdate] || []} canShow={position.canShow} onClose={handleClose} />
+        )
+      }
+      
     </div>
   );
 }
