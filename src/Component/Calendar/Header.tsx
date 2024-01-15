@@ -8,14 +8,33 @@ import leftarrow from "../../assests/left.svg";
 import info from "../../assests/info.svg";
 import MCalendarHelper from "./helper";
 import "./calendar.scss";
-import EventPopperBox from "./EventPopperBox";
-import { Header as MHeader } from './calendar.type';
+import { Header as MHeader } from "./calendar.type";
+import Popup from "./Popup/Popup";
 
+function Header({ showInfoIcon, eventDate }: MHeader) {
+  const iconRef = React.useRef<HTMLElement>();
+  const [position, setPosition] = React.useState<{
+    x: number;
+    y: number;
+    canShow: boolean;
+  }>({ x: 0, y: 0, canShow: false });
+  const { currentDate, moveNextMonth, movePreviousMonth, public_holidays } =
+    useCalendarState((state) => state);
 
-function Header({ showInfoIcon, eventDate }: MHeader ) {
-  const { currentDate, moveNextMonth, movePreviousMonth, public_holidays } = useCalendarState(
-    (state) => state
-  );
+  React.useEffect(() => {
+    if (iconRef.current) {
+      let { left, top } = iconRef.current.getBoundingClientRect();
+      if (top + 340 >= document.body.clientHeight) top = top - 170;
+      if (left + 350 >= document.body.clientWidth) left = left - 200;
+      setPosition(() => ({ x: left + 50, y: top + 50, canShow: true }));
+    }
+  }, [iconRef.current]);
+
+  const setIconRef = React.useCallback((node: HTMLDivElement) => {
+    if (node) {
+      iconRef.current = node;
+    }
+  }, []);
 
   const handlePrevious = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     movePreviousMonth();
@@ -27,12 +46,18 @@ function Header({ showInfoIcon, eventDate }: MHeader ) {
     e.stopPropagation();
   };
 
-  const formattedDate = MCalendarHelper.getFormattedDate(eventDate || currentDate, 'yyyy-MM-dd')
-  const gpholidays = React.useMemo(() => {
-    const { response } = public_holidays ?? { response: []};
-    return _.groupBy(response, ({ date }) => date );
-  }, [public_holidays]);
+  const showOrHideHandler = (flag: boolean) => {
+    setPosition((pos) => ({ ...pos, canShow: flag }));
+  };
 
+  const formattedDate = MCalendarHelper.getFormattedDate(
+    eventDate || currentDate,
+    "yyyy-MM-dd"
+  );
+  const gpholidays = React.useMemo(() => {
+    const { response } = public_holidays ?? { response: [] };
+    return _.groupBy(response, ({ date }) => date);
+  }, [public_holidays]);
 
   return (
     <React.Fragment>
@@ -69,22 +94,28 @@ function Header({ showInfoIcon, eventDate }: MHeader ) {
             />
           </div>
         </p>
-        {
-          showInfoIcon && 
+        {showInfoIcon && (
           <p>
-            <div data-tooltip-id={`${formattedDate}-info`}>
-               <motion.img
+            <div ref={setIconRef}>
+              <motion.img
                 src={info}
                 alt="right-arrow"
                 height={30}
                 width={20}
-               />
+                onHoverStart={() => showOrHideHandler(true)}
+                onHoverEnd={() => showOrHideHandler(false)}
+              />
             </div>
-            <EventPopperBox id={`${formattedDate}-info`} place="bottom" public_events={gpholidays[formattedDate]} />
           </p>
-          
-        }
+        )}
       </motion.article>
+      <Popup
+        top={`${position.y}px`}
+        left={`${position.x}px`}
+        canShow={position.canShow}
+        public_holidays={gpholidays[formattedDate] || []}
+        onClose={() => showOrHideHandler(false)}
+      />
     </React.Fragment>
   );
 }

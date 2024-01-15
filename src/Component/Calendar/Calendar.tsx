@@ -37,7 +37,7 @@ function Calendar({ view = "monthly", ...rest }: MCalendar) {
           type: 'error',
           autoClose: 3000,
           closeOnClick: true,
-          theme: 'colored',
+          theme: 'colored'
         });
       }
     })

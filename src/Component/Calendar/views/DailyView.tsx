@@ -1,7 +1,7 @@
 import React from "react";
 import { MCalendar, MEvents } from "../calendar.type";
 import * as _ from "lodash";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useCalendarState } from "../../../store/bucket";
 import * as _dutlis from "date-fns";
 import MCalendarHelper from "../helper";
@@ -151,7 +151,7 @@ function DailyView({ events, onSelectTime, setEventDate }: MCalendar & { setEven
     <>
       <motion.article className="mcalendar-daily-view text-center">
         <div className="my-1 mx-1 row row-cols-12 gap-3 justify-content-evenly align-items-center info-container">
-          <div className="col-5 today selected text-center">
+          <div className="col-auto today selected text-center">
             <div className="d-flex justify-content-between align-items-center">
               <article
                 onClick={movePrev}

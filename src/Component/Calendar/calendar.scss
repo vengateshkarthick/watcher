@@ -227,8 +227,8 @@ $box-shadow: #f5f5f5;
       }
     }
     .events {
-      @include smallBox($success);
-      height: 100%;
+      @include smallBox(#717ff7);
+      height: 60%;
       width: auto;
     }
   }
