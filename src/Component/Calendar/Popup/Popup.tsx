@@ -13,7 +13,14 @@ interface Popup {
   canShow: boolean;
   onClose: () => void;
 }
-function Popup({ top, left, public_holidays, onClose, canShow }: Popup) {
+function Popup({
+  top,
+  left,
+  public_holidays,
+  onClose,
+  canShow,
+  grouped_events,
+}: Popup) {
   return ReactDOM.createPortal(
     canShow && (
       <AnimatePresence>
@@ -47,6 +54,20 @@ function Popup({ top, left, public_holidays, onClose, canShow }: Popup) {
                   <motion.p className="box m-0 col-2">&nbsp;</motion.p>
                   <motion.p className="name m-0 col-auto mx-1">
                     {name?.trim()}
+                  </motion.p>
+                </React.Fragment>
+              ))}
+              {grouped_events?.map(({ title, tags, startTime, endTime }) => (
+                <React.Fragment key={title.toLowerCase()}>
+                  <motion.p className="box m-0 col-2">&nbsp;</motion.p>
+                  <motion.p className="name m-0 col-auto mx-1">
+                    <div className="event-title">{title}</div> &nbsp;
+                    {startTime}&nbsp;-&nbsp;{endTime}
+                    <motion.section className="tags">
+                      {tags?.map(({ label, color }) => (
+                        <div style={{ color }}>{label}</div>
+                      ))}
+                    </motion.section>
                   </motion.p>
                 </React.Fragment>
               ))}

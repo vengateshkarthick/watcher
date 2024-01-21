@@ -55,9 +55,27 @@ $secondary-tilt: #263e5869;
       color: $secondary-tilt;
     }
   }
-  .name,
+  .event-title {
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+  .name, .tags,
   .type {
     font-size: 0.8rem;
+  }
+  .tags {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    div {
+      background-color: $secondary;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
   }
   .box {
     @include smallBox(#717ff7);

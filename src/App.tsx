@@ -6,8 +6,8 @@ function App() {
   const exampleEvents: MEvents[] = [
     {
       title: "Team Meeting",
-      startDate: "2023-11-15",
-      endDate: "2023-11-15",
+      startDate: "2024-01-15",
+      endDate: "2024-01-15",
       startTime: "09:00 AM",
       endTime: "10:00 AM",
       remindBefore: ["1800", "3600"],
@@ -22,8 +22,8 @@ function App() {
     },
     {
       title: "Lunch with Friends",
-      startDate: "2023-12-20",
-      endDate: "2023-12-20",
+      startDate: "2024-02-20",
+      endDate: "2024-02-20",
       startTime: "12:30 PM",
       endTime: "01:30 PM",
       tags: [{ label: "Social", color: "#e74c3c" }],
@@ -35,8 +35,8 @@ function App() {
     },
     {
       title: "Project Deadline",
-      startDate: "2024-01-15",
-      endDate: "2024-01-15",
+      startDate: "2024-03-1",
+      endDate: "2024-03-4",
       startTime: "02:00 PM",
       endTime: "05:00 PM",
       remindBefore: ["86400"],
