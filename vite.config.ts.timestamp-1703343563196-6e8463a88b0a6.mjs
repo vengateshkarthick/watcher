@@ -1,0 +1,20 @@
+// vite.config.ts
+import { defineConfig } from "file:///workspaces/watcher/node_modules/vite/dist/node/index.js";
+import react from "file:///workspaces/watcher/node_modules/@vitejs/plugin-react/dist/index.mjs";
+import viteTsconfigPaths from "file:///workspaces/watcher/node_modules/vite-tsconfig-paths/dist/index.mjs";
+var vite_config_default = defineConfig({
+  // depending on your application, base can also be "/"
+  base: "/",
+  plugins: [react(), viteTsconfigPaths()],
+  server: {
+    // this ensures that the browser opens upon server start
+    open: true,
+    // this sets a default port to 3000  
+    port: 3e3
+  },
+  envDir: "src/"
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcudHMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCIvd29ya3NwYWNlcy93YXRjaGVyXCI7Y29uc3QgX192aXRlX2luamVjdGVkX29yaWdpbmFsX2ZpbGVuYW1lID0gXCIvd29ya3NwYWNlcy93YXRjaGVyL3ZpdGUuY29uZmlnLnRzXCI7Y29uc3QgX192aXRlX2luamVjdGVkX29yaWdpbmFsX2ltcG9ydF9tZXRhX3VybCA9IFwiZmlsZTovLy93b3Jrc3BhY2VzL3dhdGNoZXIvdml0ZS5jb25maWcudHNcIjtpbXBvcnQgeyBkZWZpbmVDb25maWcgfSBmcm9tICd2aXRlJ1xuaW1wb3J0IHJlYWN0IGZyb20gJ0B2aXRlanMvcGx1Z2luLXJlYWN0J1xuaW1wb3J0IHZpdGVUc2NvbmZpZ1BhdGhzIGZyb20gJ3ZpdGUtdHNjb25maWctcGF0aHMnXG5cbi8vIGh0dHBzOi8vdml0ZWpzLmRldi9jb25maWcvXG5leHBvcnQgZGVmYXVsdCBkZWZpbmVDb25maWcoe1xuICAgIC8vIGRlcGVuZGluZyBvbiB5b3VyIGFwcGxpY2F0aW9uLCBiYXNlIGNhbiBhbHNvIGJlIFwiL1wiXG4gICAgYmFzZTogJy8nLFxuICAgIHBsdWdpbnM6IFtyZWFjdCgpLCB2aXRlVHNjb25maWdQYXRocygpXSxcbiAgICBzZXJ2ZXI6IHsgICAgXG4gICAgICAgIC8vIHRoaXMgZW5zdXJlcyB0aGF0IHRoZSBicm93c2VyIG9wZW5zIHVwb24gc2VydmVyIHN0YXJ0XG4gICAgICAgIG9wZW46IHRydWUsXG4gICAgICAgIC8vIHRoaXMgc2V0cyBhIGRlZmF1bHQgcG9ydCB0byAzMDAwICBcbiAgICAgICAgcG9ydDogMzAwMCwgXG4gICAgfSxcbiAgICBlbnZEaXI6ICdzcmMvJyxcbn0pXG4iXSwKICAibWFwcGluZ3MiOiAiO0FBQTJPLFNBQVMsb0JBQW9CO0FBQ3hRLE9BQU8sV0FBVztBQUNsQixPQUFPLHVCQUF1QjtBQUc5QixJQUFPLHNCQUFRLGFBQWE7QUFBQTtBQUFBLEVBRXhCLE1BQU07QUFBQSxFQUNOLFNBQVMsQ0FBQyxNQUFNLEdBQUcsa0JBQWtCLENBQUM7QUFBQSxFQUN0QyxRQUFRO0FBQUE7QUFBQSxJQUVKLE1BQU07QUFBQTtBQUFBLElBRU4sTUFBTTtBQUFBLEVBQ1Y7QUFBQSxFQUNBLFFBQVE7QUFDWixDQUFDOyIsCiAgIm5hbWVzIjogW10KfQo=

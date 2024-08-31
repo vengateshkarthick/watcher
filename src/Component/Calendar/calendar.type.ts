@@ -1,8 +1,14 @@
+import { ReactNode } from "react";
+import { PlacesType } from "react-tooltip";
+
 export type Mremainder = "1800" | "3600" | "86400" | "600";
 export interface Mweekdays {
-    short: ["Mon" & string, "Tue" & string, "Wed" & string, "Thur" & string, "Fri" & string, "Sat" & string, "Sun" & string];
-    long: ["Monday" & string, "Tuesday" & string, "Wednesday" & string, "Thursday" & string, "Friday" & string, "Saturday" & string, "Sunday" & string];
+    short: [ "Sun" & string, "Mon" & string, "Tue" & string, "Wed" & string, "Thur" & string, "Fri" & string, "Sat" & string];
+    long: ["Sunday" & string, "Monday" & string, "Tuesday" & string, "Wednesday" & string, "Thursday" & string, "Friday" & string, "Saturday" & string];
 } 
+
+export type MViews  = "monthly" | "daily";
+
 export interface MEvents {
   title: string,
   startDate: string,
@@ -18,5 +24,27 @@ export interface MEvents {
 }
 export interface MCalendar {
   events?: Array<MEvents>,
+  view?: MViews,
+  currentDateTime?: string,
   onSelectDate?: (currentDate: string, selectedEvents?:MEvents[]) => void,
+  onSelectTime?: (currentDate: string, selectedEvents?:MEvents[]) => void,
+}
+
+export interface Hresponse {
+  name: string;
+  date: string |  { iso: string };
+  type: Array<string>;
+}
+
+export interface EventPopper {
+  id: string;
+  place?: PlacesType;
+  public_events?: Hresponse[];
+  custom_events?: MEvents[];
+}
+
+export interface Header {
+  showInfoIcon: boolean;
+  cusotmInfoContent?: ReactNode;
+  eventDate?: Date 
 }

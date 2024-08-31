@@ -21,9 +21,20 @@ body {
 
 .mcalendar-container {
   margin: auto;
-  min-width: 650px;
-  max-width: 40dvw;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  min-width: 100%;
+  max-width: 80dvw;
   height: 700px;
+  gap: 2rem;
   overflow: hidden auto;
   scroll-behavior: smooth;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  p {
+    margin-bottom: 0;
+  }
 }
