@@ -75,12 +75,14 @@ To set up the project locally, follow these steps:
 - `npm run lint`: Lints the codebase.
 
 ## Roadmap
-- [ ] Created UI for date view and month view
-- [ ] Use Zustand to properly update date for respective year and month
-- [ ] Display public events in tooltip
+- [x] Created UI for date view and month view
+- [x] Use Zustand to properly update date for respective year and month
+- [x] Display public events in tooltip
 - [ ] Add event creation and editing functionalities.
 - [ ] Enhance calendar UI and add support for recurring events.
-- [ ] Optimize performance for large event datasets.
+- [ ] Optimize performance for large event datasets and Multi browser comptabilities.
+
+
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
