@@ -1,5 +1,5 @@
 # Calendar React App
-## Switch to develop branch
+
 
 This is a React-based calendar application designed to display events, modify them, and provide a smooth user experience using modern tools and libraries. The project is currently a **Work In Progress (WIP)**.
 
@@ -75,8 +75,10 @@ To set up the project locally, follow these steps:
 - `npm run lint`: Lints the codebase.
 
 ## Roadmap
+- [ ] Created UI for date view and month view
+- [ ] Use Zustand to properly update date for respective year and month
+- [ ] Display public events in tooltip
 - [ ] Add event creation and editing functionalities.
-- [ ] Integrate backend API for event persistence.
 - [ ] Enhance calendar UI and add support for recurring events.
 - [ ] Optimize performance for large event datasets.
 
