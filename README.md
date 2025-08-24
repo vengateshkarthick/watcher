@@ -1,4 +1,4 @@
-# Calendar React App
+# My watcher
 
 
 This is a React-based calendar application designed to display events, modify them, and provide a smooth user experience using modern tools and libraries. The project is currently a **Work In Progress (WIP)**.
